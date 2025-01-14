@@ -7,12 +7,12 @@ prompt message = do
   getLine
 
 calculate :: Double -> String -> Double -> Double
-calculate leftNumber arithmetic rightNumber = do
-  case arithmetic of
-    "+" -> leftNumber + rightNumber
-    "-" -> leftNumber - rightNumber
-    "*" -> leftNumber * rightNumber
-    "/" -> leftNumber / rightNumber
+calculate leftNumber arithmetic rightNumber
+  | arithmetic == "+" = leftNumber + rightNumber
+  | arithmetic == "-" = leftNumber - rightNumber
+  | arithmetic == "*" = leftNumber * rightNumber
+  | arithmetic == "/" = leftNumber / rightNumber
+  | otherwise = error "invalid arithmetic"
 
 main = do
   putStrLn "start calculator"
