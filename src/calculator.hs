@@ -14,10 +14,15 @@ calculate leftNumber arithmetic rightNumber
   | arithmetic == "/" = leftNumber / rightNumber
   | otherwise = error "invalid arithmetic"
 
-main = do
-  putStrLn "start calculator"
-  putStrLn "q is end calculator"
+{- exec :: String -> String -> [String]
+exec message input
+  | input == "q" = []
+  | otherwise = do
+      inputStr <- prompt message
+      let argInput = inputStr :: String
+      exec argInput "number >" -}
 
+calculator = do
   inputLeftNumber <- prompt "number > "
   let leftNumber = read inputLeftNumber :: Double
 
@@ -28,3 +33,9 @@ main = do
 
   let result = calculate leftNumber inputArithmetic rightNumber
   putStrLn (inputLeftNumber ++ " " ++ inputArithmetic ++ " " ++ inputRightNumber ++ " = " ++ show result)
+
+main = do
+  putStrLn "start calculator"
+  putStrLn "q is end calculator"
+
+  calculator
