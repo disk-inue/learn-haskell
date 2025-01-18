@@ -1,6 +1,5 @@
 module Main (main) where
 
-import Control.Monad (when)
 import System.IO (hFlush, stdout)
 import Text.Read (readMaybe)
 
@@ -22,21 +21,18 @@ calculator :: IO ()
 calculator = do
   inputLeftNumber <- prompt "number > "
   let maybeLeftNumber = readMaybe inputLeftNumber :: Maybe Double
-  let (leftNumber, leftShouldContinue) = case maybeLeftNumber of
-        Just parsedInput -> (parsedInput, True)
-        Nothing -> (0.0, False)
-
-  inputArithmetic <- prompt "four arithmetic operations(+, -, *, /) > "
-
-  inputRightNumber <- prompt "number > "
-  let maybeRightNumber = readMaybe inputRightNumber :: Maybe Double
-  let (rightNumber, rightShouldContinue) = case maybeRightNumber of
-        Just parsedInput -> (parsedInput, True)
-        Nothing -> (0.0, False)
-
-  let result = calculate leftNumber inputArithmetic rightNumber
-  when (leftShouldContinue || rightShouldContinue) $
-    putStrLn (inputLeftNumber ++ " " ++ inputArithmetic ++ " " ++ inputRightNumber ++ " = " ++ show result)
+  case maybeLeftNumber of
+    Nothing -> return ()
+    Just leftNumber -> do
+      inputArithmetic <- prompt "four arithmetic operations(+, -, *, /) > "
+      inputRightNumber <- prompt "number > "
+      let maybeRightNumber = readMaybe inputRightNumber :: Maybe Double
+      case maybeRightNumber of
+        Nothing -> return ()
+        Just rightNumber -> do
+          let result = calculate leftNumber inputArithmetic rightNumber
+          putStrLn (inputLeftNumber ++ " " ++ inputArithmetic ++ " " ++ inputRightNumber ++ " = " ++ show result)
+          calculator
 
 main :: IO ()
 main = do
