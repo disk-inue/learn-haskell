@@ -34,9 +34,20 @@ calculator = do
           putStrLn (inputLeftNumber ++ " " ++ inputArithmetic ++ " " ++ inputRightNumber ++ " = " ++ show result)
           calculator
 
+todo :: IO ()
+todo = do
+  putStrLn "start doto"
+  putStrLn "q is end todo"
+  putStrLn "select menu : 1. add, 2. edit, 3. done, 4. delete, 5. list"
+  let todo = [(0, "hoge")]
+  let todoMap = Map.fromList todo
+
+  return ()
+
 main :: IO ()
 main = do
   putStrLn "start calculator"
   putStrLn "q is end calculator"
 
   calculator
+  todo
