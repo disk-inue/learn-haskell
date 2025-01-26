@@ -42,8 +42,18 @@ todo = do
   putStrLn "select menu : 1. add, 2. edit, 3. done, 4. delete, 5. list"
   let todoMap = Map.empty
   let addMap = Map.insert "1" "add" todoMap
-  putStrLn (show addMap)
-  return ()
+  print addMap
+  editInputNumber <- prompt "number >"
+  let maybeEditNumber = readMaybe editInputNumber :: Maybe String
+  case maybeEditNumber of
+    Nothing -> do
+      print (show maybeEditNumber)
+      return ()
+    Just editNumber -> do
+      editInputTitle <- prompt "title >"
+      let editMap = Map.adjust (\x -> if x == show editNumber then editInputTitle else "hoge") editNumber addMap
+      print editMap
+      return ()
 
 main :: IO ()
 main = do
