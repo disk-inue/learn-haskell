@@ -46,14 +46,20 @@ todo = do
   editInputNumber <- prompt "number >"
   let maybeEditNumber = readMaybe editInputNumber :: Maybe String
   case maybeEditNumber of
-    Nothing -> do
-      print (show maybeEditNumber)
-      return ()
+    Nothing -> return ()
     Just editNumber -> do
       editInputTitle <- prompt "title >"
-      let editMap = Map.adjust (\x -> if x == show editNumber then editInputTitle else "hoge") editNumber addMap
+      let editMap = Map.adjust (editInputTitle ++) editNumber addMap
       print editMap
-      return ()
+
+      removeInputNumber <- prompt "number >"
+      let maybeRemoveNumber = readMaybe removeInputNumber :: Maybe String
+      case maybeRemoveNumber of
+        Nothing -> return ()
+        Just removeNumber -> do
+          let removeMap = Map.delete removeNumber editMap
+          print removeMap
+          return ()
 
 main :: IO ()
 main = do
