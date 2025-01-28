@@ -35,25 +35,29 @@ calculator = do
           putStrLn (inputLeftNumber ++ " " ++ inputArithmetic ++ " " ++ inputRightNumber ++ " = " ++ show result)
           calculator
 
+data TodoStatus = Done | Todo deriving (Show)
+
+data TodoItem = TodoItem {itemId :: Int, title :: String, status :: TodoStatus} deriving (Show)
+
 todo :: IO ()
 todo = do
   putStrLn "start doto"
   putStrLn "q is end todo"
   putStrLn "select menu : 1. add, 2. edit, 3. done, 4. delete, 5. list"
-  let todoMap = Map.empty
-  let addMap = Map.insert "1" "add" todoMap
+  let todoMap = Map.empty :: Map.Map Int TodoItem
+  let addMap = Map.insert 1 TodoItem {itemId = 1, title = "hoge", status = Done} todoMap
   print addMap
   editInputNumber <- prompt "number >"
-  let maybeEditNumber = readMaybe editInputNumber :: Maybe String
+  let maybeEditNumber = readMaybe editInputNumber :: Maybe Int
   case maybeEditNumber of
     Nothing -> return ()
     Just editNumber -> do
       editInputTitle <- prompt "title >"
-      let editMap = Map.adjust (editInputTitle ++) editNumber addMap
+      let editMap = Map.adjust (\value -> value {title = editInputTitle}) editNumber addMap
       print editMap
 
-      removeInputNumber <- prompt "number >"
-      let maybeRemoveNumber = readMaybe removeInputNumber :: Maybe String
+      removeInputNumber <- prompt "remove number >"
+      let maybeRemoveNumber = readMaybe removeInputNumber :: Maybe Int
       case maybeRemoveNumber of
         Nothing -> return ()
         Just removeNumber -> do
