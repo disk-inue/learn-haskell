@@ -1,5 +1,6 @@
 module Main (main) where
 
+import Data.Map (Map)
 import qualified Data.Map.Strict as Map
 import System.IO (hFlush, stdout)
 import Text.Read (readMaybe)
@@ -43,9 +44,11 @@ todo :: IO ()
 todo = do
   putStrLn "start doto"
   putStrLn "q is end todo"
-  putStrLn "select menu : 1. add, 2. edit, 3. done, 4. delete, 5. list"
   let todoMap = Map.empty :: Map.Map Int TodoItem
-  let addMap = Map.insert 1 TodoItem {itemId = 1, title = "hoge", status = Done} todoMap
+
+  putStrLn "select menu : 1. add, 2. edit, 3. done, 4. delete, 5. list"
+  addInputTitle <- prompt "title >"
+  let addMap = addTodo (Map.size todoMap) TodoItem {itemId = 1, title = addInputTitle, status = Done} todoMap
   print addMap
   editInputNumber <- prompt "number >"
   let maybeEditNumber = readMaybe editInputNumber :: Maybe Int
@@ -64,6 +67,9 @@ todo = do
           let removeMap = Map.delete removeNumber editMap
           print removeMap
           return ()
+
+addTodo :: Int -> TodoItem -> Map Int TodoItem -> Map Int TodoItem
+addTodo key value addMap = Map.insert key value addMap
 
 main :: IO ()
 main = do
