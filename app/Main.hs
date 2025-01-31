@@ -45,35 +45,59 @@ todo = do
   putStrLn "start doto"
   putStrLn "q is end todo"
   let todoMap = Map.empty :: Map.Map Int TodoItem
+  todoExec todoMap
 
+todoExec :: Map Int TodoItem -> IO ()
+todoExec targetMap = do
   putStrLn "select menu : 1. add, 2. edit, 3. done, 4. delete, 5. list"
-  addInputTitle <- prompt "title >"
-  let addMap = addTodo (Map.size todoMap) TodoItem {itemId = 1, title = addInputTitle, status = Todo} todoMap
-  print addMap
-  editInputNumber <- prompt "number >"
-  let maybeEditNumber = readMaybe editInputNumber :: Maybe Int
-  case maybeEditNumber of
+  menuInput <- prompt ">"
+  let maybeMenuNumber = readMaybe menuInput :: Maybe Int
+  case maybeMenuNumber of
     Nothing -> return ()
-    Just editNumber -> do
-      editInputTitle <- prompt "title >"
-      let editMap = editTodo editNumber editInputTitle addMap
-      print editMap
+    Just menuNumber -> do
+      todoSelectMenu menuNumber targetMap
+      return ()
 
+todoSelectMenu :: Int -> Map Int TodoItem -> IO ()
+todoSelectMenu menuNumber todoMap = do
+  case menuNumber of
+    1 -> do
+      addInputTitle <- prompt "title >"
+      let addMap = addTodo (Map.size todoMap) TodoItem {itemId = 1, title = addInputTitle, status = Todo} todoMap
+      print addMap
+      todoExec addMap
+    2 -> do
+      editInputNumber <- prompt "edit number >"
+      let maybeEditNumber = readMaybe editInputNumber :: Maybe Int
+      case maybeEditNumber of
+        Nothing -> return ()
+        Just editNumber -> do
+          editInputTitle <- prompt "title >"
+          let editMap = editTodo editNumber editInputTitle todoMap
+          print editMap
+          todoExec editMap
+    3 -> do
       doneInputNumber <- prompt "number >"
       let maybeDoneNumber = readMaybe doneInputNumber :: Maybe Int
       case maybeDoneNumber of
         Nothing -> return ()
         Just doneNumber -> do
-          let doneMap = doneTodo doneNumber editMap
+          let doneMap = doneTodo doneNumber todoMap
           print doneMap
-          removeInputNumber <- prompt "remove number >"
-          let maybeRemoveNumber = readMaybe removeInputNumber :: Maybe Int
-          case maybeRemoveNumber of
-            Nothing -> return ()
-            Just removeNumber -> do
-              let removeMap = Map.delete removeNumber editMap
-              print removeMap
-              return ()
+          todoExec doneMap
+    4 -> do
+      removeInputNumber <- prompt "remove number >"
+      let maybeRemoveNumber = readMaybe removeInputNumber :: Maybe Int
+      case maybeRemoveNumber of
+        Nothing -> return ()
+        Just removeNumber -> do
+          let removeMap = Map.delete removeNumber todoMap
+          print removeMap
+          todoExec removeMap
+    5 -> do
+      print todoMap
+      todoExec todoMap
+    _ -> return ()
 
 addTodo :: Int -> TodoItem -> Map Int TodoItem -> Map Int TodoItem
 addTodo key value targetMap = Map.insert key value targetMap
