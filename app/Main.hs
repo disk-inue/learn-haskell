@@ -3,7 +3,9 @@ module Main (main) where
 import Data.Map (Map)
 import qualified Data.Map.Strict as Map
 import System.IO (hFlush, stdout)
+import System.Random (randomRIO)
 import Text.Read (readMaybe)
+import Prelude (putStrLn)
 
 prompt :: String -> IO String
 prompt message = do
@@ -108,6 +110,12 @@ editTodo targetKey editTitle targetMap = Map.adjust (\value -> value {title = ed
 doneTodo :: Int -> Map Int TodoItem -> Map Int TodoItem
 doneTodo targetKey targetMap = Map.adjust (\value -> value {status = Done}) targetKey targetMap
 
+dice :: IO ()
+dice = do
+  putStrLn "start dice"
+  diceNumber -<- randomRIO (1, 6)
+  putStrLn ("dice number " ++ show diceNumber)
+
 main :: IO ()
 main = do
   putStrLn "start calculator"
@@ -115,3 +123,4 @@ main = do
 
   calculator
   todo
+  dice
