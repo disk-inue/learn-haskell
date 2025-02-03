@@ -2,10 +2,10 @@ module Main (main) where
 
 import Data.Map (Map)
 import qualified Data.Map.Strict as Map
-import System.IO (hFlush, stdout)
-import System.Random (randomRIO)
+import System.IO (IO, hFlush, stdout, print, putStr, putStrLn, getLine)
+import System.Random (newStdGen, randomR, StdGen)
 import Text.Read (readMaybe)
-import Prelude (putStrLn)
+import Prelude (String, Int, Double,  Maybe (Just, Nothing), Show, return, (++), error, ($), (==), (+),(-),(/),(*),show,otherwise)
 
 prompt :: String -> IO String
 prompt message = do
@@ -113,8 +113,9 @@ doneTodo targetKey targetMap = Map.adjust (\value -> value {status = Done}) targ
 dice :: IO ()
 dice = do
   putStrLn "start dice"
-  diceNumber -<- randomRIO (1, 6)
-  putStrLn ("dice number " ++ show diceNumber)
+  gen <- newStdGen
+  let (diceNumber, _) = randomR (1, 6) gen :: (Int, StdGen)
+  putStrLn $ "dice number " ++ show diceNumber
 
 main :: IO ()
 main = do
