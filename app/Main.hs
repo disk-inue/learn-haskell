@@ -2,10 +2,9 @@ module Main (main) where
 
 import Data.Map (Map)
 import qualified Data.Map.Strict as Map
-import System.IO (IO, hFlush, stdout, print, putStr, putStrLn, getLine)
-import System.Random (newStdGen, randomR, StdGen)
+import System.IO (hFlush, stdout)
+import System.Random (StdGen, newStdGen, randomR)
 import Text.Read (readMaybe)
-import Prelude (String, Int, Double,  Maybe (Just, Nothing), Show, return, (++), error, ($), (==), (+),(-),(/),(*),show,otherwise)
 
 prompt :: String -> IO String
 prompt message = do
@@ -119,9 +118,13 @@ dice = do
 
 main :: IO ()
 main = do
-  putStrLn "start calculator"
+  putStrLn "start app"
+  putStrLn "select app : 1. calculator, 2. todo, 3. dice"
   putStrLn "q is end calculator"
-
-  calculator
-  todo
-  dice
+  menuInput <- prompt ">"
+  let maybeMenuNumber = readMaybe menuInput :: Maybe Int
+  case maybeMenuNumber of
+    Just 1 -> calculator
+    Just 2 -> todo
+    Just 3 -> dice
+    _ -> return ()
